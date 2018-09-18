@@ -57,23 +57,27 @@ def main(particles):
     
 main(3)
 """
-
+def particleInit(particles):
+    a = [[0] for i in range(0,1<<particles)]
+    for i in range(0, 1<<particles):
+        arr = []
+        for j in range(0, particles):
+            if(i & (1<<j)):
+                arr.append(Up)
+            else:
+                arr.append(Down)	         
+            a[i] = arr
+    return a
+ 
 #Defining basis for 3 particles
 def main(particles):
-	a = [[0] for i in range(0,1<<particles)]
-
-	for i in range(0, 1, particles):
-		arr = []
-		for j in range(0, particles):
-			if(i & (1<<j)):
-				arr.append(Up)
-			else:
-				arr.append(Down)
-		arr.reverse()
-		a[i] = arr
-	a.reverse()
-	print(a)
-
+    parts = particleInit(particles)
+    for part in parts:
+        part.reverse()
+    
+    parts.reverse()    
+    print(parts)
+    
 main(3)
 
 #Hamiltonian
