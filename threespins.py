@@ -20,43 +20,35 @@ I = np.identity(2)
 
 #Tensor products
 #Sz
-sz1 = np.tensordot(sz, I, axes=0)
-S_1z = np.tensordot(sz1, I, axes=0)
+S_1z = np.tensordot(np.tensordot(sz, I, axes=0), I, axes=0)
 
-sz2 = np.tensordot(I, sz, axes=0)
-S_2z = np.tensordot(sz2, I, axes=0)
+S_2z = np.tensordot(np.tensordot(I, sz, axes=0), I, axes=0)
 
-sz3 = np.tensordot(I, I, axes=0)
-S_3z = np.tensordot(sz3, sz, axes=0)
+S_3z = np.tensordot(np.tensordot(I, I, axes=0), sz, axes=0)
+
+"""
+for i in range(0, particles):
+	Test = np.tensordot(np.identity(particles-1), sz, axes=0)
+"""
 
 #Sx
-sx1 = np.tensordot(sx, I, axes=0)
-S_1x = np.tensordot(sx1, I, axes=0)
+S_1x = np.tensordot(np.tensordot(sx, I, axes=0), I, axes=0)
 
-sx2 = np.tensordot(I, sx, axes=0)
-S_2x = np.tensordot(sx2, I, axes=0)
+S_2x = np.tensordot(np.tensordot(I, sx, axes=0), I, axes=0)
 
-sx3 = np.tensordot(I, I, axes=0)
-S_3x = np.tensordot(sx3, sx, axes=0)
+S_3x = np.tensordot(np.tensordot(I, I, axes=0), sx, axes=0)
 
 #Sy
-sy1 = np.tensordot(sy, I, axes=0)
-S_1y = np.tensordot(sy1, I, axes=0)
+S_1y = np.tensordot(np.tensordot(sy, I, axes=0), I, axes=0)
 
-sy2 = np.tensordot(I, sy, axes=0)
-S_2y = np.tensordot(sy2, I, axes=0)
+S_2y = np.tensordot(np.tensordot(I, sy, axes=0), I, axes=0)
 
-sy3 = np.tensordot(I, I, axes=0)
-S_3y = np.tensordot(sy3, sy, axes=0)
+S_3y = np.tensordot(np.tensordot(I, I, axes=0), sy, axes=0)
 
-"""
-def main(particles):
-    l = [[0] for i in range(0, 2**particles)]
-    print(l)
-    #for i in range(0, particles):
-    
-main(3)
-"""
+
+###Defining basis for 3 particles
+#Returns all possible combinations of spin up and down for given number of particles
+
 def particleInit(particles):
     a = [[0] for i in range(0,1<<particles)]
     for i in range(0, 1<<particles):
@@ -69,16 +61,15 @@ def particleInit(particles):
             a[i] = arr
     return a
  
-#Defining basis for 3 particles
 def main(particles):
     parts = particleInit(particles)
     for part in parts:
         part.reverse()
     
     parts.reverse()    
-    print(parts)
+    #print(parts)
     
-main(3)
+main(2)
 
 #Hamiltonian
 """
@@ -89,10 +80,14 @@ print H
 for j in range(
 """
 
+A = S_1z*S_2z
 
 
 
 
+B = S_2z*S_3z
+
+print B
 
 
 
