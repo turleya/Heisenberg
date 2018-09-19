@@ -80,6 +80,18 @@ print H
 for j in range(
 """
 
+#Generalizing spin operators for n particles
+
+def main(S_nz):
+    for i in range(0, particles):
+	i=0
+	while i<n:
+		g = np.tensordot(I, I, axes=0)
+	print g 
+    return g
+
+#f = np.tensordot(g, sz, axes=0) #g is the identity matrix in loop?
+
 A = S_1z*S_2z
 
 
@@ -87,7 +99,7 @@ A = S_1z*S_2z
 
 B = S_2z*S_3z
 
-print B
+#print B
 
 
 
