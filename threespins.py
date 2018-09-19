@@ -102,7 +102,8 @@ B = S_2z*S_3z
 #print B
 
 
-
+l = np.tensordot(sz, I, axes=0)
+print l
 
 
 
