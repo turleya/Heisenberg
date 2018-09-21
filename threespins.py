@@ -20,56 +20,61 @@ I = np.identity(2)
 
 #Tensor products
 #Sz
-S_1z = np.tensordot(np.tensordot(sz, I, axes=0), I, axes=0)
+sz1 = np.tensordot(sz, I, axes=0)
+S_1z = np.tensordot(sz1, I, axes=0)
 
-S_2z = np.tensordot(np.tensordot(I, sz, axes=0), I, axes=0)
+sz2 = np.tensordot(I, sz, axes=0)
+S_2z = np.tensordot(sz2, I, axes=0)
 
-S_3z = np.tensordot(np.tensordot(I, I, axes=0), sz, axes=0)
-
-"""
-for i in range(0, particles):
-	Test = np.tensordot(np.identity(particles-1), sz, axes=0)
-"""
+sz3 = np.tensordot(I, I, axes=0)
+S_3z = np.tensordot(sz3, sz, axes=0)
 
 #Sx
-S_1x = np.tensordot(np.tensordot(sx, I, axes=0), I, axes=0)
+sx1 = np.tensordot(sx, I, axes=0)
+S_1x = np.tensordot(sx1, I, axes=0)
 
-S_2x = np.tensordot(np.tensordot(I, sx, axes=0), I, axes=0)
+sx2 = np.tensordot(I, sx, axes=0)
+S_2x = np.tensordot(sx2, I, axes=0)
 
-S_3x = np.tensordot(np.tensordot(I, I, axes=0), sx, axes=0)
+sx3 = np.tensordot(I, I, axes=0)
+S_3x = np.tensordot(sx3, sx, axes=0)
 
 #Sy
-S_1y = np.tensordot(np.tensordot(sy, I, axes=0), I, axes=0)
+sy1 = np.tensordot(sy, I, axes=0)
+S_1y = np.tensordot(sy1, I, axes=0)
 
-S_2y = np.tensordot(np.tensordot(I, sy, axes=0), I, axes=0)
+sy2 = np.tensordot(I, sy, axes=0)
+S_2y = np.tensordot(sy2, I, axes=0)
 
-S_3y = np.tensordot(np.tensordot(I, I, axes=0), sy, axes=0)
+sy3 = np.tensordot(I, I, axes=0)
+S_3y = np.tensordot(sy3, sy, axes=0)
 
-
-###Defining basis for 3 particles
-#Returns all possible combinations of spin up and down for given number of particles
-
-def particleInit(particles):
-    a = [[0] for i in range(0,1<<particles)]
-    for i in range(0, 1<<particles):
-        arr = []
-        for j in range(0, particles):
-            if(i & (1<<j)):
-                arr.append(Up)
-            else:
-                arr.append(Down)	         
-            a[i] = arr
-    return a
- 
+"""
 def main(particles):
-    parts = particleInit(particles)
-    for part in parts:
-        part.reverse()
+    l = [[0] for i in range(0, 2**particles)]
+    print(l)
+    #for i in range(0, particles):
     
-    parts.reverse()    
-    #print(parts)
-    
-main(2)
+main(3)
+"""
+
+#Defining basis for 3 particles
+def main(particles):
+	a = [[0] for i in range(0,1<<particles)]
+
+	for i in range(0, 1, particles):
+		arr = []
+		for j in range(0, particles):
+			if(i & (1<<j)):
+				arr.append(Up)
+			else:
+				arr.append(Down)
+		arr.reverse()
+		a[i] = arr
+	a.reverse()
+	print(a)
+
+main(3)
 
 #Hamiltonian
 """
@@ -80,30 +85,13 @@ print H
 for j in range(
 """
 
-#Generalizing spin operators for n particles
-
-def main(S_nz):
-    for i in range(0, particles):
-	i=0
-	while i<n:
-		g = np.tensordot(I, I, axes=0)
-	print g 
-    return g
-
-#f = np.tensordot(g, sz, axes=0) #g is the identity matrix in loop?
-
-A = S_1z*S_2z
 
 
 
 
-B = S_2z*S_3z
-
-#print B
 
 
-l = np.tensordot(sz, I, axes=0)
-print l
+
 
 
 
