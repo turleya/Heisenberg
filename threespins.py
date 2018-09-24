@@ -58,26 +58,71 @@ def main(particles):
 main(3)
 """
 
+
+def particleInit(particles):
+    a = [[0] for i in range(0,1<<particles)]
+    for i in range(0, 1<<particles):
+        arr = []
+        for j in range(0, particles):
+            if(i & (1<<j)):
+                arr.append(Up)
+            else:
+                arr.append(Down)	         
+            a[i] = arr
+    return a
+ 
 #Defining basis for 3 particles
 def main(particles):
-	a = [[0] for i in range(0,1<<particles)]
-
-	for i in range(0, 1, particles):
-		arr = []
-		for j in range(0, particles):
-			if(i & (1<<j)):
-				arr.append(Up)
-			else:
-				arr.append(Down)
-		arr.reverse()
-		a[i] = arr
-	a.reverse()
-	print(a)
-
+    parts = particleInit(particles)
+    for part in parts:
+        part.reverse()
+    
+    parts.reverse()    
+    print(parts)
+    
 main(3)
 
-#Hamiltonian
+def _init_(self,particles,J_xy,J_zz,counts):
+     #length of matrix
+    self.J_xy = J_xy #strength of flip-flop term
+    self.J_zz = J_zz #strength of Ising interaction
+    self.counts = counts #number of times the code will sweep through states
+    parts = particleInit(particles)   
+    
+    
+    #Forming matrix containing each part of basis    
+    self.B = np.vstack(part in parts.reshape((3,1<<particles)))
+    print self.B
+    
+    
+    l = 0.0
+    E = 0.0
+    E_sq = 0.0
+    
+    for l in range(self.counts):
+        l += 1
+        
+        for i in range(0,particles):
+            for j in range(0,1<<particles):
+                s = self.B[i,j]
+                #trying to define all operators to act on basis B
+                Z_i*Up = (1./2)*Up     
+                Z_i*Down = (1./2)*Down
+                Plus_i*Up = 0
+                Plus_i*Down = (1./2)*Up
+                Minus_i*Up = (1./2)*Down
+                Minus_i*Down = 0
+                
+                #Hamiltonian                 
+                H = J_zz*Z_i*Z_(i+1)*self.B + J_xy*Plus_i*Minus_(i+1)*self.B + J_xy*Minus_i*Plus_(i+1)*self.B
+                #How to turn this into the Hamiltonian matrix?
+                
+        return H
+        print H
+                
 """
+#Hamiltonian
+
 H = S_1x*S_2x + S_1y*S_2y + S_1z*S_2z + S_2x*S_3x + S_2y*S_3y + S_2z*S_3z
 
 print H
