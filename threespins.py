@@ -15,8 +15,13 @@ sx = 1./2*x
 sy = 1./2*y
 sz = 1./2*z
 
+splus = np.matrix([[0,1],[0,0]])
+sminus = np.matrix([[0,0],[1,0]])
+
+
 #Identity matrix
 I = np.identity(2)
+ZeroMat = np.matrix([[0, 0], [0, 0]])
 
 #Tensor products
 #Sz
@@ -58,7 +63,19 @@ def main(particles):
 main(3)
 """
 
-
+def createMatrix(sign, index, particles):
+    if sign == "plus":
+        sign = splus
+    else:
+        sign = sminus
+    l = []
+    mat = np.array(l, ndmin=particles)
+    for i in range(0, particles):
+        l.append(ZeroMat)
+        np.append(mat, l)
+    print(mat)
+    
+    
 def particleInit(particles):
     a = [[0] for i in range(0,1<<particles)]
     for i in range(0, 1<<particles):
@@ -71,18 +88,39 @@ def particleInit(particles):
             a[i] = arr
     return a
  
+def normaliseMatrices(list):
+    mats = []
+    for element in list:
+        l = []
+        for x in range(0, len(element)):
+            if element[x][0] == [1]:
+                l.append([1])
+                l.append([0])
+            else:
+                l.append([0])
+                l.append([1])
+        mat = np.matrix(l)
+        mats.append(mat)
+    return mats
+    
 #Defining basis for 3 particles
 def main(particles):
     parts = particleInit(particles)
     for part in parts:
         part.reverse()
-    
     parts.reverse()    
-    print(parts)
     
+main(2)
+print("-------")
 main(3)
+#print(splus)
+#print(sminus)
 
-def _init_(self,particles,J_xy,J_zz,counts):
+createMatrix("plus", 1, 2)
+
+
+'''
+def _init_(particles,J_xy,J_zz,counts):
      #length of matrix
     self.J_xy = J_xy #strength of flip-flop term
     self.J_zz = J_zz #strength of Ising interaction
@@ -119,7 +157,7 @@ def _init_(self,particles,J_xy,J_zz,counts):
                 
         return H
         print H
-                
+   '''             
 """
 #Hamiltonian
 
@@ -129,32 +167,3 @@ print H
 
 for j in range(
 """
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
