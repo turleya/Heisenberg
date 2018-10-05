@@ -75,8 +75,16 @@ def spinoperatorminus(particles,index):
 def Hamiltonian(particles):
     J_ij = 1.0 #anistropy parameter
     B_i = 0.0 #local magnetic field
-    H = np.zeros([2**particles,2**particles])
+
+    #Chain
+    #H = np.zeros([2**particles,2**particles])
+
+    #Loop
     #H = 0.5*J_ij*(spinoperatorplus(particles,1)*spinoperatorminus(particles,particles) + spinoperatorplus(particles,particles)*spinoperatorminus(particles,1)) + J_ij*(spinoperatorz(particles,1)*spinoperatorz(particles,particles))
+
+    #Particles not interacting
+    H = -(0.5*J_ij*(spinoperatorplus(particles,2)*spinoperatorminus(particles,3) + spinoperatorplus(particles,3)*spinoperatorminus(particles,2)) + J_ij*(spinoperatorz(particles,2)*spinoperatorz(particles,3)))
+
     for i in range(particles-1):	
 	H_i = 0.5*J_ij*(spinoperatorplus(particles,i+1)*spinoperatorminus(particles,i+2) + spinoperatorplus(particles,i+2)*spinoperatorminus(particles,i+1)) + J_ij*(spinoperatorz(particles,i+1)*spinoperatorz(particles,i+2)) + B_i*spinoperatorz(particles, i+1)
 	H = H + H_i
