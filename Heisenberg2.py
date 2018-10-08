@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Oct  8 22:39:24 2018
+
+@author: aoifeturley
+"""
+
 import numpy as np
 from numpy import linalg as la
 
@@ -75,13 +82,13 @@ def spinoperatorminus(particles,index):
 #Heisenberg Hamiltonian 
 def Hamiltonian(particles):
     J_ij = 1.0 #anistropy parameter
-    B_j = 0.1 #local magnetic field
+    B_j = 0.0 #local magnetic field
 
     #Chain
-    #H = np.zeros([2**particles,2**particles])
+    H = np.zeros([2**particles,2**particles])
 
     #Loop
-    H = 0.5*J_ij*(spinoperatorplus(particles,1)*spinoperatorminus(particles,particles) + spinoperatorplus(particles,particles)*spinoperatorminus(particles,1)) + J_ij*(spinoperatorz(particles,1)*spinoperatorz(particles,particles))
+    #H = 0.5*J_ij*(spinoperatorplus(particles,1)*spinoperatorminus(particles,particles) + spinoperatorplus(particles,particles)*spinoperatorminus(particles,1)) + J_ij*(spinoperatorz(particles,1)*spinoperatorz(particles,particles))
 
     #Particles not interacting
     #H = -(0.5*J_ij*(spinoperatorplus(particles,2)*spinoperatorminus(particles,3) + spinoperatorplus(particles,3)*spinoperatorminus(particles,2)) + J_ij*(spinoperatorz(particles,2)*spinoperatorz(particles,3)))
@@ -96,34 +103,40 @@ def Hamiltonian(particles):
 
 Ham = Hamiltonian(3)
 
+w, v = la.eig(Ham)
+
 #Computing eigenvalues of Hamiltonian
-def eigen(particles):
-    w, v = la.eig(Ham)
+def eigenvalues(particles):
     for i in range(0, 2**particles):
 	w_i = w[i] 
-	v_i = v[i]
 	print(round(w_i,4)) #eigenvalues
-	print(np.around(v_i, decimals=2)) #eigenvectors
+eigenvalues(3)   
 
-eigen(3)   
+print("-------------")
 
+#Computing eigenvectors of Hamiltonian
+def eigenvectors(particles):
+    for i in range(0, 2**particles):
+	v_i = v[i] 
+	print(np.around(v_i, decimals=2)) #eigenvalues
+eigenvectors(3)
+
+"""
 #Computing expectation values
 def expecval(particles):
     for i in range(particles):
-	Ket = spinoperatorz(particles, i+1)*v_i
-    return Ket
-
+        Ket_i = spinoperatorz(particles, i+1)*eigenvectors(particles)
+        Bra_i = eigenvectors(particles)*Ket_i
+    print(Bra_i)
+    
 expecval(3)
-
 """
 
+"""
 #Test
 J_ij = 1.0
 B_i = 0.1
 H = 0.5*J_ij*(spinoperatorplus(3,1)*spinoperatorminus(3,2) + spinoperatorplus(3,2)*spinoperatorminus(3,1)) + J_ij*(spinoperatorz(3,1)*spinoperatorz(3,2)) + 0.5*J_ij*(spinoperatorplus(3,2)*spinoperatorminus(3,3) + spinoperatorplus(3,3)*spinoperatorminus(3,2)) + J_ij*(spinoperatorz(3,2)*spinoperatorz(3,3)) + B_i*(spinoperatorz(3,1) + spinoperatorz(3,2) + spinoperatorz(3,3))
-
-
-
 def eigen(particles):
     w, v = la.eig(H)
     for i in range(0, 2**particles):
@@ -131,14 +144,7 @@ def eigen(particles):
 	v_i = v[i]
 	print(round(w_i,4)) #eigenvalues
 	print(np.around(v_i, decimals=2)) #eigenvectors
-
 eigen(3) 
 """
-
-
-
-
-
-
 
 
