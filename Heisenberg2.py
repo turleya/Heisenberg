@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Oct  8 22:39:24 2018
-
-@author: aoifeturley
-"""
-
 import numpy as np
 from numpy import linalg as la
 
@@ -101,37 +94,56 @@ def Hamiltonian(particles):
 	H = H + H_j
     return(H)
 
-Ham = Hamiltonian(3)
+Ham = Hamiltonian(2)
 
 w, v = la.eig(Ham)
+#print(v)
+l = np.transpose(v)
+#print(l)
+#print("----------")
+#print(v[0])
 
 #Computing eigenvalues of Hamiltonian
 def eigenvalues(particles):
     for i in range(0, 2**particles):
 	w_i = w[i] 
-	print(round(w_i,4)) #eigenvalues
-eigenvalues(3)   
+	return(round(w_i,4)) #eigenvalues
+eigenvalues(2)   
 
-print("-------------")
+#Computing column eigenvectors of Hamiltonian
+def eigenvectorsc(particles):
+    
+    for i in range(0, 2**particles):
+	v_i = v[i]
+	vec = v_i.reshape(2**particles,1) 
+    return(np.around(vec, decimals=2)) #eigenvalues
+E = eigenvectorsc(2)
+#print(E)
 
-#Computing eigenvectors of Hamiltonian
-def eigenvectors(particles):
+#Computing row eigenvectors of Hamiltonian
+def eigenvectorsr(particles):
     for i in range(0, 2**particles):
 	v_i = v[i] 
-	print(np.around(v_i, decimals=2)) #eigenvalues
-eigenvectors(3)
+	return(np.around(v_i, decimals=2)) #eigenvalues
+eigenvectorsr(2)
 
-"""
+
+
 #Computing expectation values
 def expecval(particles):
     for i in range(particles):
-        Ket_i = spinoperatorz(particles, i+1)*eigenvectors(particles)
-        Bra_i = eigenvectors(particles)*Ket_i
-    print(Bra_i)
+        Ket_i = spinoperatorz(particles, i+1)*l
+        Bra_i = v*Ket_i
+    	print(Bra_i)
     
-expecval(3)
-"""
+expecval(2)
 
+"""
+Ket = spinoperatorz(2,2)*eigenvectorsc(2)
+Bra = eigenvectorsr(2)*Ket
+
+print(Bra)
+"""
 """
 #Test
 J_ij = 1.0
@@ -146,5 +158,9 @@ def eigen(particles):
 	print(np.around(v_i, decimals=2)) #eigenvectors
 eigen(3) 
 """
+
+
+
+
 
 
