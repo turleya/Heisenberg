@@ -1,22 +1,18 @@
 import numpy as np
 from numpy import linalg as la
 
-#Pauli matrices
-x = np.array([[0,1],[1,0]])
-y = np.array([[0, -1j], [1j,0]])
-z = np.array([[1,0], [0,-1]])
+#Spin operators
+sx = np.array([[0,1./2],[1./2,0]])
+sy = np.array([[0, -1./2j], [1./2j,0]])
+sz = np.array([[1./2,0], [0,-1./2]])
+
+splus = np.array([[0,1],[0,0]])
+sminus = np.array([[0,0],[1,0]])
 
 #Spin up and down
 Up = np.array([[1],[0]])
 Down = np.array([[0], [1]])
 
-#Spin operators
-sx = 1./2*x
-sy = 1./2*y
-sz = 1./2*z
-
-splus = np.array([[0,1],[0,0]])
-sminus = np.array([[0,0],[1,0]])
 I = np.identity(2)
 
 #Defining basis of all possible combinations of spins for n particles
