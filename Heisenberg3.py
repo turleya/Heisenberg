@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Oct 11 19:31:10 2018
+
+@author: aoifeturley
+"""
+
 import numpy as np
 from numpy import linalg as la
 
@@ -116,36 +123,25 @@ def Hamiltonian(particles):
 	H = H + H_j
     return(H)
 
-Ham = Hamiltonian(2)
+Ham = Hamiltonian(3)
 
 #Eigenvalue and eigenvector calculation
 w, v = la.eig(Ham)
-#print(w)
-
-#Computing eigenvalues of Hamiltonian
-def eigenvalues(particles):
-    for i in range(0, 2**particles):
-	w_i = w[i] 
-	return(round(w_i,8)) 
-eigenvalues(3)   
-
-print("-------------")
-print("-------------")
-
-#Computing column eigenvectors of Hamiltonian
-def eigenvectorsc(particles,index):
-    for i in range(0, 2**particles):
-	v_i = v[i]
-	l = v[i].reshape(2**particles,1)
-	if i == (index-1):
-	    return(l)
-
-
+E = np.around(w,decimals=8) #Full array of all eigenvalues
+#print(E[0])
 
 #Computing row eigenvectors of Hamiltonian
 def eigenvectorsr(particles,index):
     for i in range(0, 2**particles):
-	v_i = v[i] 
+	l = v[0:(2**particles),i].reshape(1,2**particles)
+	if i == (index-1):
+	    return(l)
+
+
+#Computing column eigenvectors of Hamiltonian
+def eigenvectorsc(particles,index):
+    for i in range(0, 2**particles):
+	v_i = v[0:(2**particles),i] 
 	if i == (index-1):
 	    return(v_i)
 
@@ -154,8 +150,8 @@ def spinoperator(particles,index):
     so = [spinoperatorx(particles,index), spinoperatory(particles,index), spinoperatorz(particles,index)]
     return(so)
 
-
-#Computing expectation values for 
+"""
+#Computing expectation values for Sx, Sy and Sz seperately
 def expecval(particles):
     for i in range(particles):
 	SO = spinoperator(particles, i+1)
@@ -173,12 +169,24 @@ def expecval(particles):
         	Bra_i = eigenvectorsr(particles,j+1)*Ket_i
 		
     		print(Bra_i)
+expecval(3)
+"""
+
+#Computing expectation values for 
+def expecvalZ(particles):
+    for i in range(particles):
+     if i == 0:
+	    print("PARTICLE , 1")
+     else:
+	    print("PARTICLE" ,(i+1),)
+     for j in range(2**particles):
+         if j == 0:
+		print("Eigenvector , 1")
+         else:
+		print("Eigenvector " ,(j+1),)
+         Ket_i = spinoperatorz(particles, i+1)*eigenvectorsc(particles,j+1)
+         Bra_i = eigenvectorsr(particles,j+1)*Ket_i
+         return(Bra_i)
     
-expecval(2)
-
-
-
-
-
-
-
+Si = expecvalZ(3)
+print(Si[0])
