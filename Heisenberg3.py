@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 11 19:31:10 2018
-
-@author: aoifeturley
-"""
-
 import numpy as np
 from numpy import linalg as la
 
@@ -104,7 +97,7 @@ def spinoperatory(particles,index):
 #Heisenberg Hamiltonian 
 def Hamiltonian(particles):
     J_ij = 1.0 #anistropy parameter
-    B_j = 0.0 #local magnetic field
+    B_j = 0.0 #local magnetic field (split is just equal 
 
     #Chain
     H = np.zeros([2**particles,2**particles])
@@ -129,6 +122,7 @@ Ham = Hamiltonian(3)
 w, v = la.eig(Ham)
 E = np.around(w,decimals=8) #Full array of all eigenvalues
 #print(E[0])
+print(w)
 
 #Computing row eigenvectors of Hamiltonian
 def eigenvectorsr(particles,index):
@@ -169,8 +163,9 @@ def expecval(particles):
         	Bra_i = eigenvectorsr(particles,j+1)*Ket_i
 		
     		print(Bra_i)
-expecval(3)
-"""
+expecval(2)
+
+
 
 #Computing expectation values for 
 def expecvalZ(particles):
@@ -186,7 +181,11 @@ def expecvalZ(particles):
 		print("Eigenvector " ,(j+1),)
          Ket_i = spinoperatorz(particles, i+1)*eigenvectorsc(particles,j+1)
          Bra_i = eigenvectorsr(particles,j+1)*Ket_i
-         return(Bra_i)
+         print(Bra_i)
     
-Si = expecvalZ(3)
-print(Si[0])
+Si = expecvalZ(2)
+#print(Si)
+"""
+
+
+
