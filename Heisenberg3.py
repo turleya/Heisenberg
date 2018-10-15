@@ -100,10 +100,10 @@ def Hamiltonian(particles):
     B_j = 0.0 #local magnetic field (split is just equal 
 
     #Chain
-    H = np.zeros([2**particles,2**particles])
+    #H = np.zeros([2**particles,2**particles])
 
     #Loop
-    #H = 0.5*J_ij*(spinoperatorplus(particles,1)*spinoperatorminus(particles,particles) + spinoperatorplus(particles,particles)*spinoperatorminus(particles,1)) + J_ij*(spinoperatorz(particles,1)*spinoperatorz(particles,particles))
+    H = 0.5*J_ij*(spinoperatorplus(particles,1)*spinoperatorminus(particles,particles) + spinoperatorplus(particles,particles)*spinoperatorminus(particles,1)) + J_ij*(spinoperatorz(particles,1)*spinoperatorz(particles,particles))
 
     #Particles not interacting
     #H = -(0.5*J_ij*(spinoperatorplus(particles,2)*spinoperatorminus(particles,3) + spinoperatorplus(particles,3)*spinoperatorminus(particles,2)) + J_ij*(spinoperatorz(particles,2)*spinoperatorz(particles,3)))
@@ -116,13 +116,14 @@ def Hamiltonian(particles):
 	H = H + H_j
     return(H)
 
-Ham = Hamiltonian(3)
+Ham = Hamiltonian(4)
+
 
 #Eigenvalue and eigenvector calculation
 w, v = la.eig(Ham)
 E = np.around(w,decimals=8) #Full array of all eigenvalues
 #print(E[0])
-print(w)
+print(E)
 
 #Computing row eigenvectors of Hamiltonian
 def eigenvectorsr(particles,index):
@@ -138,13 +139,16 @@ def eigenvectorsc(particles,index):
 	v_i = v[0:(2**particles),i] 
 	if i == (index-1):
 	    return(v_i)
+D = eigenvectorsc(2,1)
+#print(D)
 
 
 def spinoperator(particles,index):
     so = [spinoperatorx(particles,index), spinoperatory(particles,index), spinoperatorz(particles,index)]
     return(so)
+SO = spinoperator(2,1)
+#print(SO)
 
-"""
 #Computing expectation values for Sx, Sy and Sz seperately
 def expecval(particles):
     for i in range(particles):
@@ -163,9 +167,9 @@ def expecval(particles):
         	Bra_i = eigenvectorsr(particles,j+1)*Ket_i
 		
     		print(Bra_i)
-expecval(2)
+expecval(4)
 
-
+"""
 
 #Computing expectation values for 
 def expecvalZ(particles):
