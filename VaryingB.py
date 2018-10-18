@@ -103,14 +103,14 @@ print(randomint)
 def Hamiltonian(particles):
     J_ij = -(1.0) #anistropy parameter 
     np.random.seed(0)
-    randomint = np.around(np.random.uniform(low=-0.5, high=0.5, size=particles), decimals=5)
+    randomint = np.around(np.random.uniform(low=-0.2, high=0.2, size=particles), decimals=5)
     print(randomint)
 
     #Chain
-    #H = np.zeros([2**particles,2**particles])
+    H = np.zeros([2**particles,2**particles])
 
     #Loop
-    H = 0.5*J_ij*(spinoperatorplus(particles,1)*spinoperatorminus(particles,particles) + spinoperatorplus(particles,particles)*spinoperatorminus(particles,1)) + J_ij*(spinoperatorz(particles,1)*spinoperatorz(particles,particles))
+    #H = 0.5*J_ij*(spinoperatorplus(particles,1)*spinoperatorminus(particles,particles) + spinoperatorplus(particles,particles)*spinoperatorminus(particles,1)) + J_ij*(spinoperatorz(particles,1)*spinoperatorz(particles,particles))
 
     #Particles not interacting
     #H = -(0.5*J_ij*(spinoperatorplus(particles,2)*spinoperatorminus(particles,3) + spinoperatorplus(particles,3)*spinoperatorminus(particles,2)) + J_ij*(spinoperatorz(particles,2)*spinoperatorz(particles,3)))
@@ -180,8 +180,8 @@ def expecval(particles):
     		print(Bra_i)
 expecval(3)
 
-
 """
+
 #Computing expectation values for 
 def expecvalZ(particles):
     for i in range(particles):
