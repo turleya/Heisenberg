@@ -96,14 +96,14 @@ def spinoperatory(particles,index):
 
 #Heisenberg Hamiltonian 
 def Hamiltonian(particles):
-    J_ij = (1.0) #anistropy parameter
+    J_ij = -(1.0) #exchange constant
     B_j = 0.0 #local magnetic field (split is just equal 
 
     #Chain
     H = np.zeros([2**particles,2**particles])
 
     #Loop
-    H = 0.5*J_ij*(spinoperatorplus(particles,1)*spinoperatorminus(particles,particles) + spinoperatorplus(particles,particles)*spinoperatorminus(particles,1)) + J_ij*(spinoperatorz(particles,1)*spinoperatorz(particles,particles))
+    #H = 0.5*J_ij*(spinoperatorplus(particles,1)*spinoperatorminus(particles,particles) + spinoperatorplus(particles,particles)*spinoperatorminus(particles,1)) + J_ij*(spinoperatorz(particles,1)*spinoperatorz(particles,particles))
 
     #Particles not interacting
     #H = -(0.5*J_ij*(spinoperatorplus(particles,2)*spinoperatorminus(particles,3) + spinoperatorplus(particles,3)*spinoperatorminus(particles,2)) + J_ij*(spinoperatorz(particles,2)*spinoperatorz(particles,3)))
@@ -119,22 +119,24 @@ def Hamiltonian(particles):
 Ham = Hamiltonian(3)
 print(Ham)
 
+
 #Eigenvalue and eigenvector calculation
-w, v = la.eigh(Ham)
+w, v = la.eig(Ham)
 E = np.around(w,decimals=8) #Full array of all eigenvalues
 
 print(E)
 V = np.around(v,decimals=3)
 print(V) #Incorrect eigenvectors
 
-"""
+
 #Computing row eigenvectors of Hamiltonian
 def eigenvectorsr(particles,index):
     for i in range(0, 2**particles):
 	l = v[0:(2**particles),i].reshape(1,2**particles)
 	if i == (index-1):
 	    return(l)
-
+#ER = eigenvectorsr(4,4)
+#print(ER)
 
 #Computing column eigenvectors of Hamiltonian
 def eigenvectorsc(particles,index):
@@ -142,10 +144,11 @@ def eigenvectorsc(particles,index):
 	v_i = v[0:(2**particles),i] 
 	if i == (index-1):
 	    return(v_i)
-D = eigenvectorsc(2,1)
+D = eigenvectorsc(3,3)
 #print(D)
 
 
+"""
 def spinoperator(particles,index):
     so = [spinoperatorx(particles,index), spinoperatory(particles,index), spinoperatorz(particles,index)]
     return(so)
