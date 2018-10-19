@@ -103,8 +103,8 @@ print(randomint)
 def Hamiltonian(particles):
     J_ij = -(1.0) #anistropy parameter 
     np.random.seed(0)
-    randomint = np.around(np.random.uniform(low=-0.2, high=0.2, size=particles), decimals=5)
-    print(randomint)
+    B_i = np.around(np.random.uniform(low=-0.2, high=0.2, size=particles), decimals=5)
+    print(B_i)
 
     #Chain
     H = np.zeros([2**particles,2**particles])
@@ -119,7 +119,7 @@ def Hamiltonian(particles):
 	H_i = 0.5*J_ij*(spinoperatorplus(particles,i+1)*spinoperatorminus(particles,i+2) + spinoperatorplus(particles,i+2)*spinoperatorminus(particles,i+1)) + J_ij*(spinoperatorz(particles,i+1)*spinoperatorz(particles,i+2))
 	H = H + H_i
     for j in range(particles):	
-	H_j = randomint[j]*spinoperatorz(particles, j+1)
+	H_j = B_i[j]*spinoperatorz(particles, j+1)
 	H = H + H_j
     return(H)
 
