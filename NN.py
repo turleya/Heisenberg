@@ -150,7 +150,7 @@ def energies(samples,particles):
 
 
 #Neural Network (NN) - Regression
-samples = 1000
+samples = 10000
 
 designmatrix = designmatrix(samples) #each row contains a feature vector
 features = np.array(['J_12', 'J_23', 'J_34', 'J_13', 'J_24', 'J_14'])
@@ -172,6 +172,13 @@ print(model.summary())
 #Train/Validation/Test sets
 import sklearn
 from sklearn.model_selection import train_test_split
+import seaborn as sns #advanced graphing library
+
+#Histogram of Targets
+#plt.figure()
+plt.title('Histogram of targets')
+sns.distplot(Energies, bins=20)
+plt.xlabel("Ground State Energies")
 
 designmatrix_tv, designmatrix_test, Energies_tv, Energies_test = train_test_split(designmatrix, Energies, test_size=0.2)
 
@@ -202,7 +209,7 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 from sklearn.metrics import accuracy_score
 import h5py
 
-callback_list = [EarlyStopping(monitor='val_loss', min_delta=1e-5, patience=10, verbose=1), ModelCheckpoint(filepath='my_model.h5', monitor='val_loss', verbose=1, save_best_only=True)] #creates a HDF5 file 'my_model.h5'
+callback_list = [EarlyStopping(monitor='val_loss', min_delta=1e-5, patience=10, verbose=1), ModelCheckpoint(filepath='NN.h5', monitor='val_loss', verbose=1, save_best_only=True)] #creates a HDF5 file 'my_model.h5'
 n_epochs = 100
 
 model_history = model.fit(x=designmatrix_train, y=Energies_train_std, validation_data=(designmatrix_val, Energies_val_std), 
@@ -214,13 +221,11 @@ print("Epochs Taken:", len(model_history.history['loss']))
 
 #Generalization Error
 #Predictions
-model_best = load_model('my_model.h5')
+model_best = load_model('NN.h5')
 Energies_pred_train = model_best.predict(designmatrix_train)*Energies_std + Energies_mu
 Energies_pred_val = model_best.predict(designmatrix_val)*Energies_std + Energies_mu
 
-#plt.plot.print_out(y_true=Energies_train, y_pred=Energies_pred_train, setname='Train')
-#plt.plot.print_out(y_true=Energies_val, y_pred=Energies_pred_val, setname='Val')
-#plt.plot.plot_history(model_history)
+plt.figure()
 plt.scatter(Energies_val, Energies_pred_val)
 plt.xlabel('Energies_true')
 plt.ylabel('Energies_pred')
