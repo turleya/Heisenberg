@@ -1,5 +1,7 @@
 import numpy as np
 from numpy import linalg as la
+#from tempfile import TemporaryFile
+
 
 
 #Spin operators
@@ -15,19 +17,6 @@ Up = np.array([[1],[0]])
 Down = np.array([[0], [1]])
 
 I = np.identity(2)
-"""
-#Defining basis of all possible combinations of spins for n particles
-def particleInit(particles): # not necessary
-    for i in range(0,1<<particles):
-	B = np.arange(1<<particles)
-	B = B.reshape((1<<particles,1))
-	C = np.zeros_like(B)
-	C_i = C
-	C_i[1-i,0] = 1
-	#print(C_i)
-
-particleInit(3)
-"""
 
 #Spin operators
 #Sz Operator
@@ -96,9 +85,8 @@ def spinoperatory(particles,index):
     return(P_i)
 
 ### Parameters ###
-samples = 5
-particles = 4
-dimension = 2
+samples = 10000
+dimension = 3
 ### Parameters ###
 
 #Design Matrix
@@ -116,11 +104,14 @@ def design_matrix(samples,dimension):
 design_matrix = design_matrix(samples,dimension)
 print(design_matrix)	
 
+#dm = np.save(sldata, design_matrix)
+
 
 #Creating J_ij for Hamiltonian
-def energies(samples,particles,dimension):
-    J = np.zeros((particles,particles))
-    Energy = np.zeros([samples,2**particles])
+def energies(samples,dimension):
+    J = np.zeros((dimension**2,dimension**2))
+    Energy = np.zeros([samples,2**(dimension**2)])
+    Ground_state = np.zeros(samples)
     for k in range(samples):
         exchange = design_matrix[k]
 
@@ -151,25 +142,28 @@ def energies(samples,particles,dimension):
                 m += 1
 
 	#Heisenberg Hamiltonian   
-        H = np.zeros([2**particles,2**particles])
-        for j in range(particles):
+        H = np.zeros([2**(dimension**2),2**(dimension**2)])
+        for j in range(dimension**2):
             i=0
             while i<j:
                 if J[i][j] != 0:
                     #print(i+1,j+1)
-                    H += J[i][j]*(0.5*(spinoperatorplus(particles,i+1)*spinoperatorminus(particles,j+1) + spinoperatorplus(particles,j+1)*spinoperatorminus(particles,i+1)) + spinoperatorz(particles,i+1)*spinoperatorz(particles,j+1))
+                    H += J[i][j]*(0.5*(spinoperatorplus((dimension**2),i+1)*spinoperatorminus((dimension**2),j+1) + spinoperatorplus((dimension**2),j+1)*spinoperatorminus((dimension**2),i+1)) + spinoperatorz((dimension**2),i+1)*spinoperatorz((dimension**2),j+1))
                 i += 1
 	
         #print(H)
         w,v = la.eigh(H)
         E = np.around(w,decimals=8) #Full array of all eigenvalues
         E_i = E
-        Energy[k,0:(2**particles)] = E_i
-    return(Energy)
+        Energy[k,0:(2**(dimension**2))] = E_i
+        Ground_state[k] = Energy[k,0]
+    return(Ground_state)
+    #return(Energy)
 
-Energies = energies(samples,particles,dimension)
+Energies = energies(samples,dimension)
 print(Energies)
 
+data = np.savez('sldata', design_matrix, Energies)
 
 
 
