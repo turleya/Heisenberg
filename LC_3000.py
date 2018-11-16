@@ -17,21 +17,28 @@ seed = 1010
 np.random.seed(seed)
 random.seed(seed)
 
-Heis_data =np.load('GS_Energies_data.npz') #each row contains a feature vector
-designmatrix = Heis_data['design_matrix']
-Energies = Heis_data['Energies'] #Target vectors
+Heis_data =np.load('sl_30000_data.npz') #each row contains a feature vector
+designmatrix = Heis_data['designmatrix']
+Energies_1 = Heis_data['GS_Energies'] #Target vectors
 
+#Ground State Energies
+Energies = np.zeros(30000)
+for i in range(30000):
+    Energies[i] = Energies_1[i,0]
+print(Energies)
+
+"""
 model = Sequential() #defining model for Heisenberg Hamiltonian
-model.add(Dense(input_dim=6, units=256, activation='relu'))
+model.add(Dense(input_dim=20, units=256, activation='relu'))
 model.add(Dense(units=256, activation='relu'))
 model.add(Dense(units=256, activation='relu'))
 model.add(Dense(units=1))
-
+"""
 
 MSE_val = []
 MSE_train = []
 dm = []
-for i in range(300, 1000, 10):
+for i in range(500, 30000, 1000):
     designmatrix_tv = []
     designmatrix_test = []
     Energies_tv = []
@@ -51,10 +58,16 @@ for i in range(300, 1000, 10):
     Energies_test_std = (Energies_test - Energies_mu) / Energies_std
 
     ## Compile ##
+    model = Sequential() #defining model for Heisenberg Hamiltonian
+    model.add(Dense(input_dim=20, units=256, activation='relu'))
+    model.add(Dense(units=256, activation='relu'))
+    model.add(Dense(units=256, activation='relu'))
+    model.add(Dense(units=1))
+
     model.compile(optimizer='adam', loss='mse')
     print(model.summary())
 
-    callback_list = [EarlyStopping(monitor='val_loss', min_delta=1e-7, patience=10, verbose=1)] 
+    callback_list = [EarlyStopping(monitor='val_loss', min_delta=1e-7, patience=10, verbose=1)]
     n_epochs = 100
 
     #Model fit
@@ -64,7 +77,10 @@ for i in range(300, 1000, 10):
 
     #Generalization Error
     #Predictions
-    indx = len(model_history.history['val_loss'])-10
+    #Energies_pred_train = model_best.predict(designmatrix_train)*Energies_std + Energies_mu
+    #Energies_pred_val = model_best.predict(designmatrix_val)*Energies_std + Energies_mu
+
+    indx = len(model_history.history['val_loss'])
     val_loss = (model_history.history['val_loss'])[indx-1]
     train_loss = (model_history.history['loss'])[indx -1]
     
@@ -85,9 +101,4 @@ plt.legend()
 plt.xlabel('Number of Samples in Training set')
 plt.ylabel('Mean Squared Error')
 plt.show()
-
-
-
-
-
 

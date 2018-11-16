@@ -17,7 +17,7 @@ seed = 1010
 np.random.seed(seed)
 random.seed(seed)
 
-Heis_data =np.load('GS_Energies_data.npz') #each row contains a feature vector
+Heis_data =np.load('Energies_data.npz') #each row contains a feature vector
 designmatrix = Heis_data['design_matrix']
 Energies = Heis_data['Energies'] #Target vectors
 
@@ -25,13 +25,12 @@ model = Sequential() #defining model for Heisenberg Hamiltonian
 model.add(Dense(input_dim=6, units=256, activation='relu'))
 model.add(Dense(units=256, activation='relu'))
 model.add(Dense(units=256, activation='relu'))
-model.add(Dense(units=1))
-
+model.add(Dense(units=16))
 
 MSE_val = []
 MSE_train = []
 dm = []
-for i in range(300, 1000, 10):
+for i in range(400, 10000, 500):
     designmatrix_tv = []
     designmatrix_test = []
     Energies_tv = []
@@ -39,7 +38,7 @@ for i in range(300, 1000, 10):
 
     #Train/Validation/Test sets
     designmatrix_tv, designmatrix_test, Energies_tv, Energies_test = train_test_split(designmatrix[0:i], Energies[0:i], test_size=0.2)
-
+    
     designmatrix_train, designmatrix_val, Energies_train, Energies_val = train_test_split(designmatrix_tv, Energies_tv, test_size=0.2)
 
     #Standardisation
@@ -51,6 +50,12 @@ for i in range(300, 1000, 10):
     Energies_test_std = (Energies_test - Energies_mu) / Energies_std
 
     ## Compile ##
+    model = Sequential() #defining model for Heisenberg Hamiltonian
+    model.add(Dense(input_dim=6, units=256, activation='relu'))
+    model.add(Dense(units=256, activation='relu'))
+    model.add(Dense(units=256, activation='relu'))
+    model.add(Dense(units=16))
+
     model.compile(optimizer='adam', loss='mse')
     print(model.summary())
 
@@ -64,7 +69,7 @@ for i in range(300, 1000, 10):
 
     #Generalization Error
     #Predictions
-    indx = len(model_history.history['val_loss'])-10
+    indx = len(model_history.history['val_loss'])
     val_loss = (model_history.history['val_loss'])[indx-1]
     train_loss = (model_history.history['loss'])[indx -1]
     
@@ -85,9 +90,3 @@ plt.legend()
 plt.xlabel('Number of Samples in Training set')
 plt.ylabel('Mean Squared Error')
 plt.show()
-
-
-
-
-
-
