@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pylab as plt
+import matplotlib
 import h5py
 
 from keras.models import Sequential, load_model
@@ -12,6 +13,18 @@ from sklearn.model_selection import train_test_split
 Heis_data =np.load('Energies_data.npz') #each row contains a feature vector
 designmatrix = Heis_data['design_matrix']
 Energies = Heis_data['Energies'] #Target vectors
+
+font = {'family' : 'normal',
+        'weight' : 'normal',
+        'size'   : 12}
+matplotlib.rc('font', **font)
+
+#Histogram of Targets
+plt.figure()
+plt.title('Histogram of targets')
+plt.hist(Energies, bins=20)
+plt.xlabel("Energies")
+plt.ylabel("Number of Samples")
 
 #Neural Network (NN) - Regression
 print("Number of Examples: %i\nNumber of Features: %i" % designmatrix.shape)
@@ -40,6 +53,18 @@ Energies_train_std = (Energies_train - Energies_mu) / Energies_std
 Energies_val_std = (Energies_val - Energies_mu) / Energies_std
 Energies_test_std = (Energies_test - Energies_mu) / Energies_std
 
+plt.figure()
+plt.title('Standardization of exchange parameters and energies')
+plt.ylabel('Number of Samples')
+plt.subplot(121)
+plt.hist(Energies_train, bins=10)
+plt.xlabel('Energies (before)')
+plt.subplot(122)
+plt.hist(Energies_train_std, bins=10)
+plt.xlabel('Energies (after)')
+#plt.ylabel("Number of Samples")
+
+
 ## Defining Model ##
 model = Sequential() #defining model for Heisenberg Hamiltonian
 model.add(Dense(input_dim=6, units=256, activation='relu'))
@@ -66,12 +91,14 @@ model_best = load_model('lattice.h5')
 Energies_pred_train = model_best.predict(designmatrix_train)*Energies_std + Energies_mu
 Energies_pred_val = model_best.predict(designmatrix_val)*Energies_std + Energies_mu
 
+
 #plt.plot.print_out(y_true=Energies_train, y_pred=Energies_pred_train, setname='Train')
 #plt.plot.print_out(y_true=Energies_val, y_pred=Energies_pred_val, setname='Val')
 #plt.plot.plot_history(model_history)
+plt.figure()
 plt.scatter(Energies_val, Energies_pred_val)
-plt.xlabel('Energies_true')
-plt.ylabel('Energies_pred')
+plt.xlabel('True Energies')
+plt.ylabel('Predicted Energies')
 plt.plot([-2,2], [-2,2], linestyle='dashed', color='k')
 plt.grid()
 
@@ -80,11 +107,11 @@ Log_val_loss = np.log10(model_history.history['val_loss'])
 
 #Accuracy
 plt.figure()
-plt.plot(range(1, len(model_history.history['loss'])+1), model_history.history['loss'], label='Train')
-plt.plot(range(1, len(model_history.history['val_loss'])+1), model_history.history['val_loss'], label='Val')
+plt.plot(range(1, len(model_history.history['loss'])+1), Log_loss, label='Training set MSE')
+plt.plot(range(1, len(model_history.history['val_loss'])+1), Log_val_loss, label='Validation set MSE')
 plt.legend()
 plt.xlabel('Number of Epochs')
-plt.ylabel('MSE')
+plt.ylabel('log(Mean Squared Error)')
 
 plt.show()
 
