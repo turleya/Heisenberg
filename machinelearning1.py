@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import linalg as la
+import matplotlib
 
 
 #Spin operators
@@ -15,6 +16,12 @@ Up = np.array([[1],[0]])
 Down = np.array([[0], [1]])
 
 I = np.identity(2)
+
+
+font = {'family' : 'normal',
+        'weight' : 'normal',
+        'size'   : 12}
+matplotlib.rc('font', **font)
 
 #Defining basis of all possible combinations of spins for n particles
 def particleInit(particles): # not necessary
@@ -149,7 +156,7 @@ def energies(samples,particles):
 
 
 #Supervised Machine Learning (Regression)
-samples = 1000
+samples = 2000
 
 designmatrix = designmatrix(samples) #each row contains a feature vector
 features = np.array(['J_12', 'J_23', 'J_34', 'J_13', 'J_24', 'J_14'])
@@ -167,9 +174,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns #advanced graphing library
 
 plt.figure()
-plt.title('Histogram of targets')
+plt.title('Histogram of Targets')
 sns.distplot(Energies, bins=20)
 plt.xlabel("Ground State Energies")
+
+plt.figure()
+plt.title('Histogram of Targets')
+plt.hist(Energies, bins=20)
+plt.xlabel("Ground State Energies")
+plt.ylabel("Number of Samples")
 
 #Compute covariance between the standardized features
 # -1 <= Cov(x,y) <= 1
@@ -239,9 +252,9 @@ for C in Cs:
     val_mse.append(mean_squared_error(y_true=Energies_val, y_pred=Energies_val_pred))
 
 plt.figure()
-plt.plot(Cs, train_mse, label='Train')
-plt.plot(Cs, val_mse, label='Val')
-plt.ylabel('MSE')
+plt.plot(Cs, train_mse, label='Training set MSE')
+plt.plot(Cs, val_mse, label='Validation set MSE')
+plt.ylabel('Mean Squared Error')
 plt.xlabel('C')
 plt.xscale('log')
 plt.legend()
@@ -260,13 +273,13 @@ print("Lowest Validation MSE: %f" % np.min(val_mse))
 
 #Generalization Error
 Energies_test_pred = Energies_mu + model.predict(designmatrix_test_std)*Energies_std
-print("Generalization MSE: %.2f" % (mean_squared_error(y_true=Energies_test, y_pred=Energies_test_pred)))
-print("Generalization MAE: %.2f" % (mean_absolute_error(y_true=Energies_test, y_pred=Energies_test_pred)))
+print("Generalization MSE: %.4f" % (mean_squared_error(y_true=Energies_test, y_pred=Energies_test_pred)))
+print("Generalization MAE: %.4f" % (mean_absolute_error(y_true=Energies_test, y_pred=Energies_test_pred)))
 
 plt.figure()
-plt.scatter(Energies_test_pred, Energies_test)
-plt.xlabel('Energies_pred')
-plt.ylabel('Energies_true')
+plt.scatter(Energies_test, Energies_test_pred)
+plt.xlabel('True Energies')
+plt.ylabel('Predicted Energies')
 plt.plot([-2,0], [-2,0], linestyle='dashed', color='k')
 plt.grid()
 plt.show()
