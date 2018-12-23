@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pylab as plt
+import matplotlib
 import imp
 import pandas as pd
 import seaborn as sns #advanced graphing library
@@ -82,10 +83,15 @@ for i in range(400, 10000, 500):
 print(MSE_train)
 print(MSE_val)
 
+font = {'family' : 'normal',
+        'weight' : 'normal',
+        'size'   : 12}
+matplotlib.rc('font', **font)
+
 #Learning Curve
 plt.figure()
-plt.plot(dm, MSE_train, label='Train')
-plt.plot(dm, MSE_val, label='Val')
+plt.plot(dm, MSE_train, label='Training set MSE')
+plt.plot(dm, MSE_val, label='Validation set MSE')
 plt.legend()
 plt.xlabel('Number of Samples in Training set')
 plt.ylabel('Mean Squared Error')
